@@ -10,7 +10,10 @@ For example, taking 7 and 109, both 7109 and 1097 are prime. The sum of these fo
 
 Find the lowest sum for a set of five primes for which any two primes concatenate to produce another prime.
 */
-
+/*NOTES
+Solution assumed the primes are below 10000, which it doesnt need to be. Plan was to make it work for 10000 first and then implement a dynamic increase in size but got lucky
+that the first set found was the right one.
+*/
 typedef struct{
   int* array;
   int highest;
@@ -196,7 +199,7 @@ int main(){
   insert_array(&a,prime2);
   insert_array(&a,prime3);
   insert_array(&a,prime4);
-  insert_array(&a,prime5);//13 + 5197 + 5701 + 6733 + 8389 = 26033
+  insert_array(&a,prime5);
   for(int i=0;i<10000;i++){
     if(!is_prime(i,&a)){
       insert_arrayP(&a,i);
@@ -204,12 +207,10 @@ int main(){
   }
   printf("%d\n", a.used);
   for(i1=0;i1<(int)a.used;i1++){
-    printf("%d %d %d %d %d\n", prime1,prime2,prime3,prime4,prime5);
     prime1= a.array[i1];
     for(i2=0;i2<(int)a.used;i2++){
       prime2=a.array[i2];
       if(is_primeK(concate(prime1,prime2),&a)&&is_primeK(concate(prime2,prime1),&a)){
-        i3=0;
         for(i3=0;i3<(int)a.used;i3++){
           prime3=a.array[i3];
           if(is_primeK(concate(prime1,prime3),&a)&&is_primeK(concate(prime2,prime3),&a)&&is_primeK(concate(prime3,prime1),&a)&&is_primeK(concate(prime3,prime2),&a)){
