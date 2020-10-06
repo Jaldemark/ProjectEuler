@@ -67,22 +67,20 @@ int binarySearch(Array *a, int l, int r, int x){
   return -1;
 }
 int is_prime(int n, Array *a){
-  if(binarySearch(a, 0, a->used, n)==-1){
-    if(n==3||n==2){
-      if(a->highest<n)
-        insert_array(a,n);
-      return 1;
-    }
-    if((n%5==0&&n!=5)||n%2==0||n%3==0)
-      return 0;
-    for(int i=3;i<=sqrt(n);i+=2){
-      if(n%i==0){
-        return 0;
-      }
-    }
+  if(n==3||n==2){
     if(a->highest<n)
       insert_array(a,n);
+    return 1;
   }
+  if((n%5==0&&n!=5)||n%2==0||n%3==0)
+    return 0;
+  for(int i=3;i<=sqrt(n);i+=2){
+    if(n%i==0){
+      return 0;
+    }
+  }
+  if(a->highest<n)
+    insert_array(a,n);
   return 1;
 }
 int main(){
@@ -98,6 +96,7 @@ int main(){
     is_prime(i,&a);
   }
   int length = (int)a.used;
+
   for(int k=2;k<=83;k+=2){
     printf("%d\n", k);
     pof4=pow(k,4);
@@ -111,8 +110,8 @@ int main(){
             pof2=pow(i,2);
             if((pof2+pof3+pof4)>=50000000)
               break;
+            count++;
             if((binarySearch(&a,0,length,i)!=-1)&&(binarySearch(&b,0,b.used,(pof2+pof3+pof4))==-1)){
-              count++;
               insert_ordered(&b,(pof2+pof3+pof4));
             }
             if(i==2)

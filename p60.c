@@ -151,14 +151,6 @@ int is_primeC(Array *a,int n){
     insert_arrayC(a,n);
   return prime;
 }
-int find_next_prime(int n, Array *a){
-  while(1){
-    n++;
-    if(is_prime(n,a))
-      break;
-  }
-  return n;
-}
 int concate(int n1, int n2){
   int length = floor(log10(abs(n2))) + 1;
   int tmp;
@@ -192,6 +184,9 @@ int main(){
   int prime3=3;
   int prime4=3;
   int prime5=3;
+  clock_t start, end;
+  double cpu_time_used;
+  start = clock();
   int i1,i2,i3,i4,i5;
   Array a;
   init_array(&a, 1);
@@ -230,9 +225,12 @@ int main(){
     }
   }
   done:
+    end = clock();
+    cpu_time_used = ((double) (end - start)) / CLOCKS_PER_SEC;
     printf("%d %d %d %d %d\n", prime1,prime2,prime3,prime4,prime5);
     printf("sum: %d\n", prime1+prime2+prime3+prime4+prime5);
-    printf("%d %d %d %d %d\n", i1,i2,i3,i4,i5);
+    printf("cpu time used: %.2f seconds", cpu_time_used);
+
 
   return 0;
 }
