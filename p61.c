@@ -61,6 +61,10 @@ int find_pairs(int start[], int end[], int length){
   int taken_numbers[6]={-1,-1,-1,-1,-1,-1};
   int pairs[6]={-1,-1,-1,-1,-1,-1};
   int pair=0;
+  int tmp[6];
+  for(int i=0;i<6;i++){
+    tmp[i]=end[i];
+  }
   int taken_counter=0;
   for(int i=0;i<length;i++){
     counter=i+1;
@@ -68,11 +72,11 @@ int find_pairs(int start[], int end[], int length){
       if(counter==6)
         counter=0;
       pair=(i+1)*10+counter+1;
-      if(start[i]==end[counter]){
+      if(start[i]==tmp[counter]){
         if(is_taken(pairs,(counter+1)*10+i+1,length)&&!is_taken(taken_numbers,counter, length))
           return -1;
         pairs[i]=pair;
-        end[counter]=-2;
+        tmp[counter]=-2;
         taken_numbers[i]=counter;
         taken_counter++;
         break;
@@ -80,10 +84,7 @@ int find_pairs(int start[], int end[], int length){
       counter++;
     }
   }
-  for(int i=0;i<6;i++){
-    printf("%d\n", pairs[i]);
-  }
-  return taken_counter==6;
+  return taken_counter;
 }
 int main(){
   // These numbers the first 4 digit number for each formulae
@@ -99,56 +100,43 @@ int main(){
   int hex=hexagonal(hexagonal_cnt);
   int hept=heptagonal(heptagonal_cnt);
   int oct=octagonal(octagonal_cnt);
-  //int ar_starts[6]={10,33,28,38,89,21};
-  //int ar_ends[6]={89,21,38,28,10,33};//8256, 5625, 2882, 8128, 2512, 1281
+  int ar_starts[6];
+  int ar_ends[6];
 
-  int ar_starts[6]={11,12,13,14,-1,-1};
-  int ar_ends[6]={32,41,23,41,21,10};
-  ar_starts[0]=first2(1089);
-  ar_ends[0]=last2(1089);
-  ar_starts[1]=first2(5151);
-  ar_ends[1]=last2(5151);
-  ar_starts[2]=first2(4510);
-  ar_ends[2]=last2(4510);
-  ar_starts[3]=first2(5151);
-  ar_ends[3]=last2(5151);
-  ar_starts[4]=first2(8910);
-  ar_ends[4]=last2(8910);
-  ar_starts[5]=first2(1045);
-  ar_ends[5]=last2(1045);
-  printf("%d\n",find_pairs(ar_starts, ar_ends,6));
-  for(int i=0;i<6;i++){
-    printf("%d %d\n", ar_starts[i], ar_ends[i]);
-  }
-  /*while(square_cnt<100){//i^2=100000
+  while(tri<10000){//i^2=100000
     printf("%d\n", sq);
-    ar_starts[0]=first2(sq);
-    ar_ends[0]=last2(sq);
-    while(tri<10000){
-      ar_starts[1]=first2(tri);
-      ar_ends[1]=last2(tri);
+    ar_starts[0]=first2(tri);
+    ar_ends[0]=last2(tri);
+    while(sq<10000){
+      ar_starts[1]=first2(sq);
+      ar_ends[1]=last2(sq);
       while(pent<10000){
+        if(tri==sq)
+          break;
         ar_starts[2]=first2(pent);
         ar_ends[2]=last2(pent);
         while(hex<10000){
+          if(pent==sq||pent==tri)
+            break;
           ar_starts[3]=first2(hex);
           ar_ends[3]=last2(hex);
           if(find_pairs(ar_starts, ar_ends,4)==0){
             break;
           }
           while(hept<10000){
+            if(hex==sq||hex==tri||hex==pent)
+              break;
             ar_starts[4]=first2(hept);
             ar_ends[4]=last2(hept);
             while(oct<10000){
+              if(hept==sq||hept==tri||hept==pent||hept==hex)
+                break;
               ar_starts[5]=first2(oct);
               ar_ends[5]=last2(oct);
-              if(tri==8256&&sq==5625&&pent==2882&&hex==8128&&hept==2512&&oct==1281)
-                printf("%d\n",find_pairs(ar_starts, ar_ends,6));
-              if(find_pairs(ar_starts, ar_ends,6)==6){
-                for(int i=0;i<6;i++){
-                  printf("%d %d\n", ar_starts[i], ar_ends[i]);
+              if(oct!=sq&&oct!=tri&&oct!=pent&&oct!=hex&&oct!=hept){
+                if(find_pairs(ar_starts, ar_ends,6)==6){
+                  goto done;
                 }
-                goto done;
               }
               oct=octagonal(++octagonal_cnt);
             }
@@ -166,15 +154,15 @@ int main(){
       }
       pentagonal_cnt=27;
       pent=pentagonal(pentagonal_cnt);
-      tri=triangle(++triangle_cnt);
+      sq=square(++square_cnt);
     }
-    triangle_cnt=45;
-    tri=triangle(triangle_cnt);
-    sq=square(++square_cnt);
+    square_cnt=33;
+    sq=square(square_cnt);
+    tri=triangle(++triangle_cnt);
   }
   printf("fuck up");
   done:
-    printf("(%d) %d %d %d %d %d\n", sq, tri, pent, hex, hept,oct);
-      printf("%d", tri+sq+pent+hex+hept+oct);*/
+    printf("%d %d %d %d %d %d\n", tri,sq, pent, hex, hept,oct);
+      printf("%d", tri+sq+pent+hex+hept+oct);
   return 0;
 }
